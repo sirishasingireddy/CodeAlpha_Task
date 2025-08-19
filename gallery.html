@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Responsive Image Gallery</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+    }
+
+    h1 {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .filter-buttons {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .filter-buttons button {
+      margin: 5px;
+      padding: 10px 15px;
+      border: none;
+      background-color: #333;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .filter-buttons button:hover {
+      background-color: #555;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 15px;
+      padding: 0 20px;
+    }
+
+    .gallery img {
+      width: 100%;
+      border-radius: 8px;
+      transition: transform 0.4s ease;
+      cursor: pointer;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05);
+    }
+
+    .lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      flex-direction: column;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 80vh;
+      margin-bottom: 10px;
+    }
+
+    .lightbox .controls {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .lightbox button {
+      background: none;
+      color: white;
+      font-size: 2rem;
+      border: none;
+      cursor: pointer;
+    }
+
+    @media screen and (max-width: 600px) {
+      .gallery {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+
+      .lightbox button {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Image Gallery</h1>
+
+  <div class="filter-buttons">
+    <button onclick="filterImages('all')">All</button>
+    <button onclick="filterImages('nature')">Nature</button>
+    <button onclick="filterImages('city')">City</button>
+    <button onclick="filterImages('animals')">Animals</button>
+  </div>
+
+  <div class="gallery" id="gallery">
+    <img src="C:\Users\Sirisha\Desktop\html project\images\nature1.jfif" data-category="nature" alt="Nature 1">
+    <img src="C:\Users\Sirisha\Desktop\html project\images\city1.jfif" data-category="city" alt="City 1">
+    <img src="C:\Users\Sirisha\Desktop\html project\images\nature2.jfif" data-category="nature" alt="Nature 2">
+    <img src="C:\Users\Sirisha\Desktop\html project\images\gallery.images.jfif" data-category="animals" alt="Animal 1">
+    <img src="C:\Users\Sirisha\Desktop\html project\images\gallery.images1.jfif" data-category="animals" alt="Animal 2">
+    <img src="C:\Users\Sirisha\Desktop\html project\images\city2.jfif" data-category="city" alt="City 2">
+    <img src="C:\Users\Sirisha\Desktop\html project\images\nature1.jfif" data-category="nature" alt="Nature 3">
+  </div>
+
+  <div class="lightbox" id="lightbox">
+    <img src="" id="lightbox-img" alt="">
+    <div class="controls">
+      <button onclick="prevImage()">❮</button>
+      <button onclick="closeLightbox()">✕</button>
+      <button onclick="nextImage()">❯</button>
+    </div>
+  </div>
+
+  <script>
+    const galleryImages = document.querySelectorAll('.gallery img');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    let currentIndex = 0;
+
+    galleryImages.forEach((img, index) => {
+      img.addEventListener('click', () => {
+        currentIndex = index;
+         showLightbox(img.src);
+      });
+    });
+
+    function showLightbox(src) {
+      lightboxImg.src = src;
+      lightbox.style.display = 'flex';
+    }
+
+    function closeLightbox() {
+      lightbox.style.display = 'none';
+    }
+
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % galleryImages.length;
+      lightboxImg.src = galleryImages[currentIndex].src;
+    }
+
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+      lightboxImg.src = galleryImages[currentIndex].src;
+    }
+
+    function filterImages(category) {
+      galleryImages.forEach(img => {
+        if (category === 'all' || img.dataset.category === category) {
+          img.style.display = 'block';
+        } else {
+          img.style.display = 'none';
+        }
+      });
+    }
+
+    // Close lightbox on outside click
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox || e.target === lightboxImg) {
+        closeLightbox();
+      }
+    });
+  </script>
+</body>
+</html>
