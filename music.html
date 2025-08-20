@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Music Player Design</title>
+    <link rel="stylesheet" href="music.css">
+    <script src="https://kit.fontawesome.com/9b0e570d2a.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="music-player">
+            <nav>
+                <div class="circle">
+                    <i class="fa-solid fa-angle-left"></i>
+                </div>
+                <div class="circle">
+                    <i class="fa-solid fa-bars"></i>
+                </div>    
+            </nav>
+
+            
+            <img src="C:\Users\Sirisha\Desktop\html project\music-img\download pics.jpg" width="250" height="250">
+
+            
+            <h1>Devotional</h1>
+            <p>jai jai Ganapathi</p>
+            
+            
+            <audio id="song">
+                <source src="C:\Users\Sirisha\Downloads\Jai Jai Ganesha - SenSongsMp3.Co.mp3" type="audio/mpeg">
+            </audio>
+
+            
+            <input type="range" value="0" id="Progress">
+
+            
+            <div class="volume-control">
+                <i class="fa-solid fa-volume-high"></i>
+                <input type="range" id="volume" min="0" max="1" step="0.1" value="1">
+            </div>
+
+            
+            <div class="controls">
+                <div><i class="fa-solid fa-backward"></i></div>
+                <div onclick="playPause()"><i class="fa-solid fa-play" id="ctrlIcon"></i></div>
+                <div><i class="fa-solid fa-forward"></i></div>
+            </div>
+        </div>
+    </div> 
+
+    <script>
+        let progress = document.getElementById("Progress");
+        let song = document.getElementById("song");
+        let ctrlIcon = document.getElementById("ctrlIcon");
+        let volume = document.getElementById("volume");
+
+        
+        song.onloadedmetadata = function () {
+            progress.max = song.duration;
+            progress.value = song.currentTime;
+        }
+
+        
+        function playPause() {
+            if (ctrlIcon.classList.contains("fa-pause")) {
+                song.pause();
+                ctrlIcon.classList.remove("fa-pause");
+                ctrlIcon.classList.add("fa-play");
+            } else {
+                song.play();
+                ctrlIcon.classList.add("fa-pause");
+                ctrlIcon.classList.remove("fa-play");
+            }
+        }
+
+        
+        song.addEventListener("timeupdate", () => {
+            progress.value = song.currentTime;
+        });
+
+        
+        progress.onchange = function () {
+            song.currentTime = progress.value;
+            song.play();
+            ctrlIcon.classList.add("fa-pause");
+            ctrlIcon.classList.remove("fa-play");
+        }
+
+        
+        volume.oninput = function () {
+            song.volume = volume.value;
+        }
+    </script>
+</body>
+</html>
